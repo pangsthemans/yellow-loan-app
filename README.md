@@ -10,6 +10,16 @@ A mobile-first phone financing application built with FastAPI, PostgreSQL, and V
 | Frontend  | Vue 3 + Quasar + Pinia + Vite      |
 | Dev Setup | Docker Compose                     |
 
+## Live Demo
+
+| | URL |
+|---|---|
+| **Frontend** | https://visionary-cocada-3231e1.netlify.app |
+| **Backend API** | https://yellow-loan-backend.fly.dev |
+| **API Docs** | https://yellow-loan-backend.fly.dev/docs |
+
+---
+
 ## Getting Started
 
 ### Prerequisites
@@ -18,7 +28,7 @@ A mobile-first phone financing application built with FastAPI, PostgreSQL, and V
 ### Run Locally
 
 ```bash
-git clone <your-repo-url>
+git clone https://github.com/pangsthemans/yellow-loan-app.git
 cd yellow-loan-app
 docker compose up --build
 ```
