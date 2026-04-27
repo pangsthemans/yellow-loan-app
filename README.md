@@ -20,6 +20,79 @@ A mobile-first phone financing application built with FastAPI, PostgreSQL, and V
 
 ---
 
+## Architecture
+
+### Local Development (Docker Compose)
+
+```
+┌─────────────────────────────────────────────────────────┐
+│                     Docker Compose                       │
+│                                                          │
+│  ┌──────────────────┐       ┌──────────────────────┐    │
+│  │  frontend:9000   │       │    backend:8000       │    │
+│  │                  │       │                       │    │
+│  │  Vite dev server │       │  FastAPI + Uvicorn    │    │
+│  │  Vue 3 + Quasar  │       │  SQLAlchemy ORM       │    │
+│  │                  │       │                       │    │
+│  │  /api/* ─────────┼──────▶│  (CORS not needed —  │    │
+│  │  proxy rewrite   │       │   same Docker network)│    │
+│  └──────────────────┘       └──────────┬────────────┘    │
+│          ▲                             │                  │
+│          │                             │ postgresql://    │
+│          │                        ┌────▼─────────────┐   │
+│          │                        │    db:5432        │   │
+│          │                        │                   │   │
+│          │                        │  PostgreSQL 15    │   │
+│          │                        │  (volume-backed)  │   │
+│          │                        └───────────────────┘   │
+└──────────┼──────────────────────────────────────────────┘
+           │
+    Browser (localhost:9000)
+```
+
+**Key detail:** Vite's dev server proxies all `/api/*` requests to `http://backend:8000` and strips the `/api` prefix. The browser only ever talks to port 9000, so no CORS headers are needed locally.
+
+---
+
+### Production (Netlify + Fly.io)
+
+```
+                        Browser
+                           │
+           ┌───────────────┴────────────────┐
+           │                                │
+           ▼                                ▼
+  ┌─────────────────┐             ┌──────────────────────┐
+  │    Netlify CDN   │             │  yellow-loan-backend  │
+  │                  │             │     .fly.dev          │
+  │  Static SPA      │  HTTPS +    │                       │
+  │  (Vite build)    │  CORS ─────▶│  FastAPI + Uvicorn    │
+  │                  │             │  SQLAlchemy ORM       │
+  │  VITE_API_BASE_URL             │                       │
+  │  points to Fly.io│             │  ALLOWED_ORIGINS env  │
+  │  at build time   │             │  permits Netlify host │
+  └─────────────────┘             └──────────┬────────────┘
+                                             │
+                                   Fly.io private network
+                                   (flycast — never public)
+                                             │
+                                  ┌──────────▼────────────┐
+                                  │   yellow-loan-db       │
+                                  │   .flycast:5432        │
+                                  │                        │
+                                  │  Fly.io Postgres       │
+                                  │  (single node, jnb)    │
+                                  └────────────────────────┘
+```
+
+**Key details:**
+- `VITE_API_BASE_URL` is baked into the JS bundle at Netlify build time — there is no runtime config file
+- The Postgres cluster is only reachable via Fly.io's internal `flycast` DNS — it is not exposed to the public internet
+- `ALLOWED_ORIGINS` on the backend is set as a Fly.io secret; adding a new frontend domain requires only `fly secrets set` and no redeploy
+- Both Fly.io machines scale to zero when idle and cold-start on the first request (~2s)
+
+---
+
 ## Getting Started
 
 ### Prerequisites
