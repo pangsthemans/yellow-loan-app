@@ -1,0 +1,137 @@
+* {
+  box-sizing: border-box;
+}
+
+:root {
+  --yellow: #F5C400;
+  --yellow-dark: #D4A800;
+  --yellow-light: #FFF8DC;
+  --dark: #1A1A1A;
+  --dark-secondary: #2C2C2C;
+  --text-muted: #6B6B6B;
+  --border: #E5E0D8;
+  --bg: #F9F7F2;
+  --white: #FFFFFF;
+  --success: #2ECC71;
+  --error: #E74C3C;
+  --font-main: 'DM Sans', sans-serif;
+  --font-mono: 'DM Mono', monospace;
+}
+
+html, body {
+  font-family: var(--font-main);
+  background: var(--bg);
+  color: var(--dark);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Yellow brand button override */
+.q-btn.bg-primary {
+  background: var(--yellow) !important;
+  color: var(--dark) !important;
+  font-weight: 600;
+}
+
+.q-btn.bg-primary:hover {
+  background: var(--yellow-dark) !important;
+}
+
+/* Step indicator */
+.step-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 14px;
+  font-weight: 700;
+  font-family: var(--font-mono);
+}
+
+.step-pill.active {
+  background: var(--yellow);
+  color: var(--dark);
+}
+
+.step-pill.done {
+  background: var(--dark);
+  color: var(--yellow);
+}
+
+.step-pill.pending {
+  background: var(--border);
+  color: var(--text-muted);
+}
+
+/* Card styles */
+.yellow-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  overflow: hidden;
+}
+
+.yellow-card:hover {
+  border-color: var(--yellow);
+  box-shadow: 0 4px 20px rgba(245, 196, 0, 0.15);
+}
+
+.phone-card-selected {
+  border: 2px solid var(--yellow) !important;
+  box-shadow: 0 4px 24px rgba(245, 196, 0, 0.25) !important;
+}
+
+/* Input styling */
+.q-field--outlined .q-field__control {
+  border-radius: 10px !important;
+}
+
+.q-field--focused .q-field__control {
+  border-color: var(--yellow) !important;
+}
+
+/* Price display */
+.price-daily {
+  font-family: var(--font-mono);
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--dark);
+}
+
+.price-label {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-muted);
+}
+
+/* Success animation */
+@keyframes pop-in {
+  0% { transform: scale(0.8); opacity: 0; }
+  70% { transform: scale(1.05); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.pop-in {
+  animation: pop-in 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+/* Affordability badge */
+.badge-affordable {
+  background: rgba(46, 204, 113, 0.12);
+  color: #1a7a40;
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
+.badge-unaffordable {
+  background: rgba(231, 76, 60, 0.1);
+  color: #c0392b;
+  border-radius: 20px;
+  padding: 2px 10px;
+  font-size: 0.72rem;
+  font-weight: 600;
+}
